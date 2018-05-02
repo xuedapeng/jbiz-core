@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="jbiz-core" default="build" basedir=".">
+<property name="debug" value="on"/>
+<property name="src" value="src"/>
+<property name="dest" value="bin"/>
+<property name="jar_file" value="bin/jbiz-core.jar"/>
+<property name="libs" value="lib" />
+
+
+<target name="init">
+    <mkdir dir="${dest}"/>
+</target>
+<target name="compile" depends="init">
+	   <!--javac source="1.7" target="1.7"  bootclasspath="/Library/Java/JavaVirtualMachines/jre1.7/rt.jar" srcdir="${src}" destdir="${dest}" debug="${debug}" -->
+	   <javac srcdir="${src}" destdir="${dest}" debug="${debug}" >
+			<compilerarg line="-encoding UTF-8 "/>
+		   	<classpath>
+		    	<fileset dir="${libs}" includes="*.jar"/>
+		   	</classpath>
+	   </javac>
+</target>
+<target name="build" depends="compile">
+    <jar jarfile="${jar_file}" basedir="${dest}"/>
+</target>
+<target name="clean">
+   <delete dir="${dest}" />
+</target>
+<target name="rebuild" depends="clean,build">
+   <ant target="clean" />
+   <ant target="build" />
+</target>
+</project>
