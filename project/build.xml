@@ -3,7 +3,8 @@
 <property name="debug" value="on"/>
 <property name="src" value="src"/>
 <property name="dest" value="bin"/>
-<property name="jar_file" value="bin/jbiz-core.jar"/>
+<!-- property name="jar_file" value="bin/jbiz-core.jar"/> -->
+<property name="jar_file" value="../../jbiz-demo/project/WebRoot/WEB-INF/lib/jbiz-core.jar"/>
 <property name="libs" value="lib" />
 
 

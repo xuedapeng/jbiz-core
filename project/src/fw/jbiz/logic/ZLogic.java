@@ -125,12 +125,12 @@ public abstract class ZLogic extends ZObject {
 		   return resStr;
 		   
 	   } catch (Exception e) {
-		   logger.error(e);
+		   logger.error(trace(e));
 		   logger.info("processLogic 13");
 		   try {
 			   ZJpaHelper.rollback(em); // 可能em事物没有启动成功
 		   } catch (Exception e2) {
-			   logger.error(e2);
+			   logger.error(trace(e2));
 		   }
 		   
 		   setErrorMessage(res, e);
@@ -166,7 +166,7 @@ public abstract class ZLogic extends ZObject {
 		   try {
 			   filter.doFilterBefore(logicParam, res);
 		   } catch(Exception e) {
-			   logger.error(e);
+			   logger.error(trace(e));
 		   }
 	   }
    }
@@ -186,7 +186,7 @@ public abstract class ZLogic extends ZObject {
 		   try {
 			   filter.doFilterAfter(logicParam, res);
 		   } catch(Exception e) {
-			   logger.error(e);
+			   logger.error(trace(e));
 		   }
 	   }
    }
@@ -201,7 +201,7 @@ public abstract class ZLogic extends ZObject {
 		   
 		   ZJpaHelper.rollback(em);
 	   } catch(Exception e) {
-		   logger.error(e);
+		   logger.error(trace(e));
 	   } finally {
 		   // ZJpaHelper.closeEntityManager(em);  process 中close
 	   }

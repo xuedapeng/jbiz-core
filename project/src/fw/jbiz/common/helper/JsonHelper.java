@@ -21,7 +21,11 @@ public class JsonHelper extends ZObject {
 
 	static Logger logger = Logger.getLogger(JsonHelper.class);
 	
-	// 获取简单的一维json元素值
+	/*
+	 * 获取简单的一维json元素值
+	 * @param key
+	 * @param jsonStr
+	 */
 	public static String getStrValFromJsonStr(String key, String jsonStr) {
 		
 		String result = null;
@@ -32,7 +36,7 @@ public class JsonHelper extends ZObject {
 			
 		} catch (JSONException e) {
 			
-			logger.error(trace(e));
+			logger.debug(trace(e));
 		}
 		
 		return result;
@@ -48,8 +52,8 @@ public class JsonHelper extends ZObject {
 			result = jsonObj.getInt(key);
 			
 		} catch (JSONException e) {
-			
-			logger.error(trace(e));
+
+			logger.debug(trace(e));
 		}
 		
 		return result;
