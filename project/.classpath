@@ -22,5 +22,6 @@
 	<classpathentry kind="lib" path="lib/gson-2.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/json-lib-2.2.3-jdk15.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-core-2.0.6.jar"/>
+	<classpathentry kind="lib" path="lib/websocket-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

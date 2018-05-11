@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import fw.jbiz.ZObject;
+import fw.jbiz.common.ZException;
 import fw.jbiz.logic.interfaces.IResponseObject;
 
 public class ZSimpleJsonObject extends ZObject  implements IResponseObject {
@@ -28,10 +29,24 @@ public class ZSimpleJsonObject extends ZObject  implements IResponseObject {
 		keys = new ArrayList<String>();
 		values = new ArrayList<Object>();
 	}
-
-	public void add(String prop, Object value) {
+	
+	@Override
+	public IResponseObject add(String prop, Object value) {
 		keys.add(prop);
 		values.add(value);
+		return this;
+	}
+	
+
+	@Override
+	public Object get(String prop) {
+		for(int i=0; i< keys.size(); i++) {
+			if (keys.get(i).equals(prop)) {
+				return values.get(i);
+			}
+		}
+		
+		return null;
 	}
 	
 	public void clear() {
@@ -157,4 +172,13 @@ public class ZSimpleJsonObject extends ZObject  implements IResponseObject {
 		}
 		return json;
 	}
+
+	@Override
+	public void ending() {
+		new ZException("not implemented.");
+		
+	}
+
+
+
 }

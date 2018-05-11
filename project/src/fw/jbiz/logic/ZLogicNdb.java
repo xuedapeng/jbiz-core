@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import fw.jbiz.ZObject;
 import fw.jbiz.common.conf.ZSystemConfig;
 import fw.jbiz.ext.json.ZGsonObject;
-import fw.jbiz.ext.json.ZSimpleJsonObject;
 import fw.jbiz.logic.interfaces.IResponseObject;
 
 
@@ -19,14 +18,14 @@ public abstract class ZLogicNdb extends ZObject {
 	private List<ZLogicNdbFilter> logicFilterList = new ArrayList<ZLogicNdbFilter>();
 	private List<ZSystemFilter> systemFilterList = new ArrayList<ZSystemFilter>();
 
-	protected void setErrorMessage(ZSimpleJsonObject res){
+	protected void setErrorMessage(IResponseObject res){
 		res.clear();
 		res.add("status", -1);
 		res.add("msg", "内部异常");
 		res.add("exception", "");
 	}
 	
-	protected void setErrorMessage(ZSimpleJsonObject res, String errDetail){
+	protected void setErrorMessage(IResponseObject res, String errDetail){
 		res.clear();
 		res.add("status", -1);
 		res.add("msg", "内部异常");

@@ -22,9 +22,18 @@ public class ZGsonObject extends ZSimpleJsonObject implements IResponseObject {
 	}
 	
 	@Override
-	public void add(String prop, Object value) {
+	public IResponseObject add(String prop, Object value) {
 		mMap.put(prop, value);
 		
+		return this;
+		
+	}
+	
+
+	@Override
+	public Object get(String prop) {
+		
+		return mMap.get(prop);
 	}
 	
 
@@ -41,5 +50,20 @@ public class ZGsonObject extends ZSimpleJsonObject implements IResponseObject {
 		String jsonStr = son.toJson(mMap);
 		
 		return jsonStr;
+	}
+	
+
+	@Override
+	public void ending() {
+		if (!mMap.containsKey(IResponseObject.RSP_KEY_CALLBACK)) {
+			return;
+		}
+		
+		Object ending = get(IResponseObject.RSP_KEY_CALLBACK);
+		
+		if (ending instanceof IResponseObject.Ending) {
+			IResponseObject.Ending cb = (IResponseObject.Ending)ending;
+			cb.run();
+		}
 	}
 }
