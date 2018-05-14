@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 
 import fw.jbiz.ZObject;
-import fw.jbiz.ext.websocket.carry.ZWsEndpoint;
 import fw.jbiz.logic.interfaces.IResponseObject;
 
 public class ZWsEventChannel extends ZObject {
@@ -16,9 +15,9 @@ public class ZWsEventChannel extends ZObject {
 	static Logger logger = Logger.getLogger(ZWsEventChannel.class);
 	
 	// <channelId, List<sessionId>
-	static Map<String, List<String>> _channelMap = new ConcurrentHashMap<String, List<String>>();
+	final static Map<String, List<String>> _channelMap = new ConcurrentHashMap<String, List<String>>();
 	// <sessionId, List<channelId>
-	static Map<String, List<String>> _sessionMap = new ConcurrentHashMap<String, List<String>>();
+	final static Map<String, List<String>> _sessionMap = new ConcurrentHashMap<String, List<String>>();
 	
 	public static  void subscribe(String channelId, String sessionId) {
 		
@@ -96,4 +95,13 @@ public class ZWsEventChannel extends ZObject {
 		_sessionMap.remove(sessionId);
 		
 	}
+	
+	protected static Map<String, List<String>> _getChannelMap() {
+		return _channelMap;
+	}
+
+	protected static Map<String, List<String>> _getSessionMap() {
+		return _sessionMap;
+	}
+	
 }

@@ -47,6 +47,9 @@ public class ZWsContainer extends ZObject {
 		return pointList;
 	}
 	
+	protected static Map<String, ZWsEndpoint> _getConnectionMap() {
+		return _connectionMap;
+	}
 	
 	
 }
