@@ -6,6 +6,7 @@ public interface IResponseObject {
 
 	public static final int RSP_CD_INFO = 1;
 	public static final int RSP_CD_OK = 0;
+	public static final int RSP_CD_OK_SILENT = 9999;
 	public static final int RSP_CD_ERR_UNKNOWN = -1;
 	public static final int RSP_CD_ERR_AUTH = -2;
 	public static final int RSP_CD_ERR_PARAM = -3;

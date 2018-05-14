@@ -16,6 +16,7 @@ import fw.jbiz.ZObject;
 import fw.jbiz.common.helper.JsonHelper;
 import fw.jbiz.ext.json.ZGsonObject;
 import fw.jbiz.ext.websocket.ZWsContainer;
+import fw.jbiz.ext.websocket.ZWsEventChannel;
 import fw.jbiz.ext.websocket.ZWsHandler;
 import fw.jbiz.ext.websocket.ZWsHandlerManager;
 import fw.jbiz.ext.websocket.ZWsHandlerParam;
@@ -27,6 +28,7 @@ public class ZWsEndpoint extends Endpoint {
 	
     private Session _session;
     private ZWsHandler _wsHandler;
+    private boolean isSignIn = false;
     
     private class ZWsMessageHandler implements MessageHandler.Whole<String> {
     	
@@ -36,11 +38,11 @@ public class ZWsEndpoint extends Endpoint {
 			logger.debug(message);
 			
 	    	IResponseObject response = new ZGsonObject();
-	    	response.add(IResponseObject.RSP_KEY_STATUS, IResponseObject.RSP_CD_OK);
+	    	response.add(IResponseObject.RSP_KEY_STATUS, IResponseObject.RSP_CD_OK_SILENT);
 	    	
 			dispatchMessage(message, response);
 			Integer status =  (Integer)response.get(IResponseObject.RSP_KEY_STATUS);
-			if (status != IResponseObject.RSP_CD_OK) {
+			if (status != IResponseObject.RSP_CD_OK_SILENT) {
 				// 需要返回消息
 				respond(response.toString());
 			}
@@ -65,6 +67,7 @@ public class ZWsEndpoint extends Endpoint {
 
 		logger.debug(String.format("sessionId=%s", session.getId()));
 		
+		ZWsEventChannel.clean(session.getId());
     	ZWsContainer.remove(this);
     }
     
@@ -117,7 +120,7 @@ public class ZWsEndpoint extends Endpoint {
     	String msgType = (String)JsonHelper.getStrValFromJsonStr(ZWsHandlerParam.MSG_KEY_MSGTYPE, message);
     	
     	// 登录消息
-    	if (_wsHandler == null) {
+    	if (!isSignIn) {
     		
     		// 第一条必须是登录消息
     		if (ZWsHandlerParam.MSG_TYPE_SIGN_IN.equals(msgType)) {
@@ -166,8 +169,10 @@ public class ZWsEndpoint extends Endpoint {
     	
     	// 生成handler
     	try {
-    		_wsHandler = clz.newInstance();
-    		_wsHandler.setSession(_session);
+    		if (_wsHandler == null) {
+	    		_wsHandler = clz.newInstance();
+	    		_wsHandler.setSession(_session);
+    		}
 		} catch (InstantiationException | IllegalAccessException e) {
 
     		logger.error(ZObject.trace(e));
@@ -181,11 +186,13 @@ public class ZWsEndpoint extends Endpoint {
     	
     	// 身份验证
     	if (!_wsHandler.auth(handlerParam, response)) {
+    		isSignIn = false;
     		response.add(IResponseObject.RSP_KEY_STATUS, IResponseObject.RSP_CD_ERR_AUTH);
     		response.add(IResponseObject.RSP_KEY_MSG, "authentication failed.");
     		return;
     	}
     	
+    	isSignIn =true;
     	_wsHandler.onSignIn(handlerParam, response);
     }
     
