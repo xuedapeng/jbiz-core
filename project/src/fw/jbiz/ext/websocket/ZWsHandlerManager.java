@@ -119,6 +119,11 @@ public class ZWsHandlerManager extends ZObject {
 		}
 	}
 	
+	private static void clean() {
+		// todo 垃圾回收
+	}
+	
+	
 	// test
 	public static void main(String[] args) throws SQLException {
 		String packageName = "fw.jbiz.ext.websocket";

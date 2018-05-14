@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 
 import fw.jbiz.ZObject;
+import fw.jbiz.ext.websocket.carry.ZWsEndpoint;
 import fw.jbiz.logic.interfaces.IResponseObject;
 
 public class ZWsEventChannel extends ZObject {
@@ -80,5 +81,19 @@ public class ZWsEventChannel extends ZObject {
 		ZWsHandlerManager.send(response, sessionIdList);
 
 		logger.info(String.format("published ok. channelId=%s, response=%s", channelId, response.toString()));
+	}
+	
+	// 清理已经断开的session
+	public static void clean(String sessionId) {
+		
+		List<String> channelIdList = _sessionMap.get(sessionId);
+		
+		if (channelIdList != null) {
+			for (String channelId: channelIdList) {
+				_channelMap.get(channelId).remove(sessionId);
+			}
+		}
+		_sessionMap.remove(sessionId);
+		
 	}
 }

@@ -37,6 +37,9 @@ public class ZWsServerApplicationConfig implements ServerApplicationConfig {
     				ZWsEndpoint.class.getName(), ZWsHandlerManager.getWsRootPath()));
         }
         
+        // 启动Jbiz websocket 服务
+        ZWsHandlerManager.initialize();
+        
         return result;
 	}
 

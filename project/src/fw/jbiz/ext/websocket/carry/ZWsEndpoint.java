@@ -16,6 +16,7 @@ import fw.jbiz.ZObject;
 import fw.jbiz.common.helper.JsonHelper;
 import fw.jbiz.ext.json.ZGsonObject;
 import fw.jbiz.ext.websocket.ZWsContainer;
+import fw.jbiz.ext.websocket.ZWsEventChannel;
 import fw.jbiz.ext.websocket.ZWsHandler;
 import fw.jbiz.ext.websocket.ZWsHandlerManager;
 import fw.jbiz.ext.websocket.ZWsHandlerParam;
@@ -65,6 +66,7 @@ public class ZWsEndpoint extends Endpoint {
 
 		logger.debug(String.format("sessionId=%s", session.getId()));
 		
+		ZWsEventChannel.clean(session.getId());
     	ZWsContainer.remove(this);
     }
     
