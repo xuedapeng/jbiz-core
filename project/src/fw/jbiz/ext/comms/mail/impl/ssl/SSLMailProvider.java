@@ -3,10 +3,10 @@ package fw.jbiz.ext.comms.mail.impl.ssl;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Base64.Encoder;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.Base64.Encoder;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -126,10 +126,13 @@ public class SSLMailProvider extends ZObject implements IMailProvider {
 		String content = mailBean.getContent();
 		
 		try {
-
-//			sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
+			// jdk1.7 start
+			// sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
+			// jdk1.7 end
+			
+			// jdk1.8 start
 			Encoder enc = Base64.getEncoder();
-			//mailDispAddr = enc.encode(mailDispAddr.getBytes("UTF-8"));
+			// jdk1.8 end
 			
 			// -- Create a new message --
 			Message msg = new MimeMessage(getMailSession());

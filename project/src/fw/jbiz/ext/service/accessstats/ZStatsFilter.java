@@ -11,7 +11,7 @@ import fw.jbiz.ext.json.ZSimpleJsonObject;
 import fw.jbiz.logic.ZLogicParam;
 import fw.jbiz.logic.ZSystemFilter;
 
-public abstract class ZStatsFilter extends ZSystemFilter {
+public  class ZStatsFilter extends ZSystemFilter {
 
 	private ZAccessBean mAccessBean = null;
 
@@ -52,7 +52,10 @@ public abstract class ZStatsFilter extends ZSystemFilter {
 	}
 	
 	// 创建，并设置扩展值
-	public abstract ZAccessBean createAccessBean(ZLogicParam logicParam);
+	public ZAccessBean createAccessBean(ZLogicParam logicParam) {
+		
+		return new ZAccessBean();
+	}
 	
 	// 允许扩展方法调整记录值
 	public void adjustAccessBean(ZAccessBean mAccessBean) {

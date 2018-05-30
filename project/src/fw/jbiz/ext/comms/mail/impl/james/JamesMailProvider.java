@@ -122,9 +122,13 @@ public class JamesMailProvider extends ZObject implements IMailProvider {
 		
 		try {
 
-//			sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
+			// jdk1.7 start
+			// sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
+			// jdk1.7 end
+			
+			// jdk1.8 start
 			Encoder enc = Base64.getEncoder();
-			//mailDispAddr = enc.encode(mailDispAddr.getBytes("UTF-8"));
+			// jdk1.8 end
 			
 			// -- Create a new message --
 			Message msg = new MimeMessage(getMailSession());
