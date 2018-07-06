@@ -27,7 +27,7 @@ public class ZWsHandlerManager extends ZObject {
 	static String WS_ROOT_PATH_DEFAULT = "/zws";
 
 	// path, handlerClass
-	static Map<String, Class<? extends ZWsHandler>> _handlerPathMap = new HashMap<String, Class<? extends ZWsHandler>>();
+	final static Map<String, Class<? extends ZWsHandler>> _handlerPathMap = new HashMap<String, Class<? extends ZWsHandler>>();
 	
 	public static String getWsRootPath() {
 	
@@ -92,6 +92,13 @@ public class ZWsHandlerManager extends ZObject {
 		logger.info("jbiz websocket manager init.");
 		
 		String packageName = ZSystemConfig.getProperty(PROP_WS_HANDLER_PKG);
+		
+		if (StringUtils.isEmpty(packageName)) {
+
+			logger.info("jbiz websocket not configed: websocket_handler_package");
+			return;
+		}
+		
 		Map<String, Annotation> annMap = AnnotationHelper.getAnnotationOnClass(packageName, WsHandler.class);
 		
 		for(String clsName: annMap.keySet()) {
@@ -117,6 +124,23 @@ public class ZWsHandlerManager extends ZObject {
 				throw new ZException("JBIZ_WEBSOCKET", e);
 			}
 		}
+		
+		if (_handlerPathMap.isEmpty()) {
+			
+			String msg = String.format("not handler class found in %s", packageName);
+			logger.error(msg);
+			throw new ZException("JBIZ_WEBSOCKET", msg);
+		}
+		
+	}
+	
+	private static void clean() {
+		// todo 垃圾回收
+	}
+	
+	protected static Map<String, Class<? extends ZWsHandler>> _getHandlerPathMap() {
+		
+		return _handlerPathMap;
 	}
 	
 	// test
