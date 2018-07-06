@@ -4,7 +4,7 @@
 <property name="src" value="src"/>
 <property name="dest" value="bin"/>
 <!-- property name="jar_file" value="bin/jbiz-core.jar"/> -->
-<property name="jar_file" value="../../jbiz-demo/project/WebRoot/WEB-INF/lib/jbiz-core.jar"/>
+<property name="jar_file" value="../../jbiz-demo/project/WebRoot/WEB-INF/lib/jbiz-core-v1.11.jar"/>
 <property name="libs" value="lib" />
 
 
@@ -12,8 +12,8 @@
     <mkdir dir="${dest}"/>
 </target>
 <target name="compile" depends="init">
-	   <!--javac source="1.7" target="1.7"  bootclasspath="/Library/Java/JavaVirtualMachines/jre1.7/rt.jar" srcdir="${src}" destdir="${dest}" debug="${debug}" -->
-	   <javac srcdir="${src}" destdir="${dest}" debug="${debug}" >
+	   <javac source="1.7" target="1.7"  bootclasspath="/Library/Java/JavaVirtualMachines/jre1.7/rt.jar" srcdir="${src}" destdir="${dest}" debug="${debug}" >
+	   <!--javac srcdir="${src}" destdir="${dest}" debug="${debug}" -->
 			<compilerarg line="-encoding UTF-8 "/>
 		   	<classpath>
 		    	<fileset dir="${libs}" includes="*.jar"/>
