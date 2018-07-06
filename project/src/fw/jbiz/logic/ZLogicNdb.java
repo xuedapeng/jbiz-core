@@ -5,62 +5,23 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import fw.jbiz.ZObject;
-import fw.jbiz.common.conf.ZSystemConfig;
 import fw.jbiz.ext.json.ZGsonObject;
 import fw.jbiz.logic.interfaces.IResponseObject;
 
 
-public abstract class ZLogicNdb extends ZObject {
+public abstract class ZLogicNdb extends ZLogicTop {
 	
 	static Logger logger = Logger.getLogger(ZLogicNdb.class);
 
-	private List<ZLogicNdbFilter> logicFilterList = new ArrayList<ZLogicNdbFilter>();
-	private List<ZSystemFilter> systemFilterList = new ArrayList<ZSystemFilter>();
-
-	protected void setErrorMessage(IResponseObject res){
-		res.clear();
-		res.add("status", -1);
-		res.add("msg", "内部异常");
-		res.add("exception", "");
-	}
+	protected List<ZLogicNdbFilter> logicFilterList = new ArrayList<ZLogicNdbFilter>();
 	
-	protected void setErrorMessage(IResponseObject res, String errDetail){
-		res.clear();
-		res.add("status", -1);
-		res.add("msg", "内部异常");
-		res.add("exception", errDetail);
-	}
-	protected void setErrorMessage(IResponseObject res, Exception e){
-		res.clear();
-		res.add("status", -1);
-		res.add("msg", "内部异常");
-		if ("true".equals(ZSystemConfig.getProperty("dev_error_detail"))) {
-			res.add("exception", trace(e));
-		}
-	}
-	
+	@Override
 	protected IResponseObject res() {
 		return new ZGsonObject();
 	}
-
-	public final String process(ZLogicParam logicParam) {
-		
-		IResponseObject res = res();
-		
-		// 以下调用，确保不会抛出异常
-		this.doSystemFilterChainsBefore(logicParam, res);
-		
-		// 以下调用，确保不会抛出异常
-		String result = this.processLogic(logicParam, res);
-		
-		// 以下调用，确保不会抛出异常
-		this.doSystemFilterChainsAfter(logicParam, res);
-		
-		return result;
-	}
 	
-   private String processLogic(ZLogicParam logicParam, IResponseObject res) {
+	@Override
+   protected String processLogic(ZLogicParam logicParam, IResponseObject res) {
 	  
 	   try {
 
@@ -107,9 +68,6 @@ public abstract class ZLogicNdb extends ZObject {
 	   this.logicFilterList.add(filter);
    }
 
-   protected void addFilter(ZSystemFilter filter) {
-	   this.systemFilterList.add(filter);
-   }
    
    private boolean doLogicFilterChainsBefore(ZLogicParam logicParam, IResponseObject res) {
 	   for (ZLogicNdbFilter filter: this.logicFilterList) {
@@ -121,17 +79,7 @@ public abstract class ZLogicNdb extends ZObject {
 	   return true;
    }
 
-   private void doSystemFilterChainsBefore(ZLogicParam logicParam, IResponseObject res) {
-	   for (ZSystemFilter filter: this.systemFilterList) {
-		   // 系统过滤器不处理异常，异常发生时不影响业务
-		   try {
-			   filter.doFilterBefore(logicParam, (ZGsonObject)res);
-		   } catch(Exception e) {
-			   logger.error(trace(e));
-		   }
-	   }
-   }
-   private boolean doLogicFilterChainsAfter(ZLogicParam logicParam, IResponseObject res) {
+   protected boolean doLogicFilterChainsAfter(ZLogicParam logicParam, IResponseObject res) {
 	   for (ZLogicNdbFilter filter: this.logicFilterList) {
 		   if (!filter.doFilterAfter(logicParam, res)) {
 			   return false;
@@ -139,17 +87,6 @@ public abstract class ZLogicNdb extends ZObject {
 	   }
 	   
 	   return true;
-   }
-
-   private void doSystemFilterChainsAfter(ZLogicParam logicParam, IResponseObject res) {
-	   for (ZSystemFilter filter: this.systemFilterList) {
-		   // 系统过滤器不处理异常，异常发生时不影响业务
-		   try {
-			   filter.doFilterAfter(logicParam, (ZGsonObject)res);
-		   } catch(Exception e) {
-			   logger.error(trace(e));
-		   }
-	   }
    }
    
    private String breakProcess(ZLogicParam logicParam, IResponseObject res) {
