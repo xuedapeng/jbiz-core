@@ -55,6 +55,40 @@ public class BeanHelper extends ZObject {
  		}
 	}
 	
+	public static Map<String, Object> bean2Map(ZObject obj) {
+		
+		Map<String, Object> rtnMap = new HashMap<String, Object>();
+		
+		Field[] fields = obj.getClass().getDeclaredFields();  
+        for (Field field : fields) {  
+            Method method = null;  
+            Object value = null;  
+            String name = field.getName();  
+            String upperName = name.substring(0, 1).toUpperCase()  
+                    + name.substring(1); 
+            
+            String methodName = "get" + upperName;
+            if (name.startsWith("is")) {
+            	methodName = name;
+            }
+            
+            try {
+				method = obj.getClass()  
+				        .getMethod(methodName); 
+	            value = method.invoke(obj);  
+            	
+            	rtnMap.put(name, value==null?"":value);
+			} catch (Exception e) {
+				logger.error(trace(e));
+			} 
+            
+        }
+		
+		return rtnMap;
+		
+		
+	}
+	
 	/*
 	 * dump bean to string
 	 */
@@ -101,7 +135,7 @@ public class BeanHelper extends ZObject {
             	sb.append("\"");
             	sb.append(": ");
             	sb.append("\"");
-            	sb.append(value);
+            	sb.append(value==null?"":value);
             	sb.append("\"");
 			} catch (Exception e) {
 				logger.error(trace(e));

@@ -69,6 +69,7 @@ public class ZWsEndpoint extends Endpoint {
 		
 		ZWsEventChannel.clean(session.getId());
     	ZWsContainer.remove(this);
+    	_wsHandler.onClose(closeReason);
     }
     
     @Override
@@ -93,7 +94,7 @@ public class ZWsEndpoint extends Endpoint {
 			_session.getBasicRemote().sendText(message);
 		} catch (IOException e) {
 
-	    	logger.error(ZObject.trace(e));
+	    	logger.error("", e);
 		}
     }
     

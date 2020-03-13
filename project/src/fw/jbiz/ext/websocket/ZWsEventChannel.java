@@ -77,9 +77,17 @@ public class ZWsEventChannel extends ZObject {
 	
 	public static void publish(String channelId, IResponseObject response) {
 		List<String> sessionIdList = _channelMap.get(channelId);
+		
+		if (sessionIdList == null) {
+
+			logger.info(String.format("published ok. subscribes=%d, channelId=%s, response=%s", 0,  channelId, response.toString()));
+			return;
+		}
+		
 		ZWsHandlerManager.send(response, sessionIdList);
 
-		logger.info(String.format("published ok. channelId=%s, response=%s", channelId, response.toString()));
+
+		logger.info(String.format("published ok. subscribes=%d, channelId=%s, response=%s", sessionIdList.size(),  channelId, response.toString()));
 	}
 	
 	// 清理已经断开的session

@@ -1,5 +1,6 @@
 package fw.jbiz.common.helper;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,9 +10,9 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import net.sf.json.JSONArray;
-
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import fw.jbiz.ZObject;
 import fw.olib.org.json.JSONException;
@@ -65,7 +66,7 @@ public class JsonHelper extends ZObject {
 		
 		String jsonDicStr = "{key:" + jsonArrStr + "}";
 		net.sf.json.JSONObject jsonobject = net.sf.json.JSONObject.fromObject(jsonDicStr);
-		objectArr = (JSONArray) jsonobject.getJSONArray("key");
+		objectArr = jsonobject.getJSONArray("key");
 
 		return objectArr;
 	}
@@ -73,8 +74,7 @@ public class JsonHelper extends ZObject {
 	// HashMap 转换为json字符串
 	public static String map2JsonStr(Map<String, Object> map) {
 		String jsonStr = null;
-		
-		jsonStr = new Gson().toJson(map);
+		jsonStr = new GsonBuilder().disableHtmlEscaping().create().toJson(map);
 		
 		return jsonStr;
 		
@@ -84,7 +84,7 @@ public class JsonHelper extends ZObject {
 	public static String list2JsonStr(List<Object> list) {
 		String jsonStr = null;
 		
-		jsonStr = new Gson().toJson(list);
+		jsonStr = new GsonBuilder().disableHtmlEscaping().create().toJson(list);
 		
 		return jsonStr;
 		
@@ -93,34 +93,34 @@ public class JsonHelper extends ZObject {
 	// json字符串 转换为 HashMap
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> jsonStr2Map(String jsonStr) {
-		Map<String, Object> retMap = new HashMap<String, Object>();
+//		Map<String, Object> retMap = new HashMap<String, Object>();
+//		
+//		if (StringUtils.isEmpty(jsonStr)) {
+//			return retMap;
+//		}
+//
+//		net.sf.json.JSONObject jsonobject = net.sf.json.JSONObject.fromObject(jsonStr);
+//		
+//		retMap = (Map<String, Object>) jsonObjectToJavaObject(jsonobject);
 		
-		if (StringUtils.isEmpty(jsonStr)) {
-			return retMap;
-		}
-
-		net.sf.json.JSONObject jsonobject = net.sf.json.JSONObject.fromObject(jsonStr);
-		
-		retMap = (Map<String, Object>) jsonObjectToJavaObject(jsonobject);
-		
-		return retMap;
+		return json2map(jsonStr);
 		
 	}
 
 	// json字符串 转换为 ArrayList
 	@SuppressWarnings("unchecked")
 	public static List<Object> jsonStr2List(String jsonStr) {
-		List<Object> retList = new ArrayList<Object>();
+//		List<Object> retList = new ArrayList<Object>();
+//		
+//		if (StringUtils.isEmpty(jsonStr)) {
+//			return retList;
+//		}
+//
+//		net.sf.json.JSONArray jsonobject = net.sf.json.JSONArray.fromObject(jsonStr);
+//		
+//		retList = (List<Object>) jsonObjectToJavaObject(jsonobject);
 		
-		if (StringUtils.isEmpty(jsonStr)) {
-			return retList;
-		}
-
-		net.sf.json.JSONArray jsonobject = net.sf.json.JSONArray.fromObject(jsonStr);
-		
-		retList = (List<Object>) jsonObjectToJavaObject(jsonobject);
-		
-		return retList;
+		return json2list(jsonStr);
 		
 	}
 
@@ -160,5 +160,36 @@ public class JsonHelper extends ZObject {
 		
 		
 		return javaObject;
+	}
+	
+
+	public static String map2json(Map<String, Object> map) {
+		return new GsonBuilder().disableHtmlEscaping().enableComplexMapKeySerialization().create().toJson(map);
+	}
+
+	public static String list2json(List<Object> list) {
+
+		return new GsonBuilder().disableHtmlEscaping().enableComplexMapKeySerialization().create().toJson(list);
+	}
+
+	public static Map<String, Object> json2map(String json) {
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping().enableComplexMapKeySerialization().create();
+
+        Type type = new TypeToken<Map<String, Object>>() {}.getType();
+
+        Map<String, Object> map = gson.fromJson(json, type);
+        
+        return map;
+	}
+
+	public static List<Object> json2list(String json) {
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping().enableComplexMapKeySerialization().create();
+
+        Type type = new TypeToken<List<Object>>() {}.getType();
+        List<Object> list = gson.fromJson(json, type);
+        
+        return list;
 	}
 }

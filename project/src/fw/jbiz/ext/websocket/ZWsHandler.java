@@ -1,5 +1,6 @@
 package fw.jbiz.ext.websocket;
 
+import javax.websocket.CloseReason;
 import javax.websocket.Session;
 
 import org.apache.log4j.Logger;
@@ -20,6 +21,7 @@ public abstract class ZWsHandler extends ZObject {
 	public abstract void onMessage(ZWsHandlerParam handlerParam, IResponseObject response);
 	public abstract void onSignIn(ZWsHandlerParam handlerParam, IResponseObject response);
 	public abstract void onSignOut(ZWsHandlerParam handlerParam, IResponseObject response);	
+	public abstract void onClose(CloseReason closeReason);	
 
 	public abstract ZWsHandlerParam getHandlerParam();	
 	
