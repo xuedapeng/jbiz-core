@@ -1,5 +1,7 @@
 package fw.jbiz.jpa;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
@@ -7,9 +9,11 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import fw.jbiz.ZObject;
+import fw.jbiz.common.conf.ZSystemConfig;
 
 /**
  * @author MyEclipse Persistence Tools
@@ -18,12 +22,16 @@ public final class ZJpaHelper extends ZObject {
 
 	static Logger logger = Logger.getLogger(ZJpaHelper.class);
 	
+	public static final String PROP_KEY_DB_USER = "hibernate.connection.username"; 
+	public static final String PROP_KEY_DB_PWD = "hibernate.connection.password"; 
+	
+	
 	private static  EntityManagerFactory emf = null;
 
 	private static EntityManagerFactory getSingleEmf(String persistenceUnitName) {
 		
 		if (emf == null) {
-			emf = Persistence.createEntityManagerFactory(persistenceUnitName);
+			emf = Persistence.createEntityManagerFactory(persistenceUnitName, getDbAuth());
 		}
 		return emf;
 	}
@@ -56,6 +64,21 @@ public final class ZJpaHelper extends ZObject {
 
 	public static Query createQuery(String query, EntityManager em) {
 		return em.createQuery(query);
+	}
+	
+	private static Map<String, String> getDbAuth() {
+		
+		String username = ZSystemConfig.getProperty(PROP_KEY_DB_USER);
+		String password = ZSystemConfig.getProperty(PROP_KEY_DB_PWD);
+		
+		if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+			return null;
+		}
+		
+		Map<String, String> map = new HashMap<String,String>();
+		map.put(PROP_KEY_DB_USER, username);
+		map.put(PROP_KEY_DB_PWD, password);
+		return map;
 	}
 
 
