@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
+
 public class EasySSLProtocolSocketFactory implements ProtocolSocketFactory {
 
 	/** Log object for this class. */

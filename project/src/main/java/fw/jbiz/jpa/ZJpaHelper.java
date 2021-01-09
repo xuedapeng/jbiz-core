@@ -21,7 +21,8 @@ import fw.jbiz.common.conf.ZSystemConfig;
 public final class ZJpaHelper extends ZObject {
 
 	static Logger logger = Logger.getLogger(ZJpaHelper.class);
-	
+
+	public static final String PROP_KEY_DB_URL = "hibernate.connection.url"; 
 	public static final String PROP_KEY_DB_USER = "hibernate.connection.username"; 
 	public static final String PROP_KEY_DB_PWD = "hibernate.connection.password"; 
 	
@@ -67,17 +68,28 @@ public final class ZJpaHelper extends ZObject {
 	}
 	
 	private static Map<String, String> getDbAuth() {
-		
+
+		String url = ZSystemConfig.getProperty(PROP_KEY_DB_URL);
 		String username = ZSystemConfig.getProperty(PROP_KEY_DB_USER);
 		String password = ZSystemConfig.getProperty(PROP_KEY_DB_PWD);
-		
-		if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
-			return null;
+
+		Map<String, String> map = new HashMap<String,String>();
+
+		if(StringUtils.isNotEmpty(url)) {
+			map.put(PROP_KEY_DB_URL, url);
 		}
 		
-		Map<String, String> map = new HashMap<String,String>();
-		map.put(PROP_KEY_DB_USER, username);
-		map.put(PROP_KEY_DB_PWD, password);
+		if(StringUtils.isNotEmpty(username)) {
+			map.put(PROP_KEY_DB_USER, username);
+		}
+
+		if(StringUtils.isNotEmpty(password)) {
+			map.put(PROP_KEY_DB_USER, password);
+		}
+		
+		if(map.isEmpty()) {
+			return null;
+		}
 		return map;
 	}
 

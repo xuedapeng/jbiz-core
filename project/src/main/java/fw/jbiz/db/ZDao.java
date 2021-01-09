@@ -6,7 +6,7 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.Logger; 
 
 import fw.jbiz.ZObject;
 import fw.jbiz.concurrent.ZCallback;
